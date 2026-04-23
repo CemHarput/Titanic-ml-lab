@@ -57,36 +57,36 @@ After running, you should see:
 
 ```mermaid
 flowchart TD
-    A[train.py main()] --> B[load_data()]
-    B --> C[train.csv + test.csv read]
-    C --> D[prepare_train_features(train_df)]
-    D --> E[add_family_features]
-    E --> F[X and y prepared]
-    F --> G[train_test_split]
-    G --> H[build_preprocessor]
-    H --> I[fit_transform x_train]
-    I --> J[transform x_valid]
-    J --> K[RandomForestClassifier.fit]
-    K --> L[predict x_valid]
-    L --> M[accuracy_score]
-    M --> N[joblib.dump model.joblib]
+    A["train main"] --> B["load data"]
+    B --> C["read train csv and test csv"]
+    C --> D["prepare train features"]
+    D --> E["add family features"]
+    E --> F["prepare X and y"]
+    F --> G["train test split"]
+    G --> H["build preprocessor"]
+    H --> I["fit transform train"]
+    I --> J["transform validation"]
+    J --> K["fit random forest"]
+    K --> L["predict validation"]
+    L --> M["compute accuracy"]
+    M --> N["save model with joblib"]
 ```
 
 ### Prediction Flow (`python src/predict.py`)
 
 ```mermaid
 flowchart TD
-    A[predict.py main()] --> B{model.joblib exists?}
-    B -- No --> C[FileNotFoundError]
-    B -- Yes --> D[load_data()]
-    D --> E[test_df selected]
-    E --> F[joblib.load model + preprocessor]
-    F --> G[prepare_test_features(test_df)]
-    G --> H[add_family_features]
-    H --> I[preprocessor.transform x_test]
-    I --> J[model.predict]
-    J --> K[PassengerId + Survived DataFrame]
-    K --> L[submission.csv written]
+    A["predict main"] --> B{"model joblib exists"}
+    B -- "no" --> C["raise file not found"]
+    B -- "yes" --> D["load data"]
+    D --> E["select test dataframe"]
+    E --> F["load model and preprocessor"]
+    F --> G["prepare test features"]
+    G --> H["add family features"]
+    H --> I["transform test features"]
+    I --> J["predict survived"]
+    J --> K["build submission dataframe"]
+    K --> L["write submission csv"]
 ```
 
 ## Notes for Beginners
