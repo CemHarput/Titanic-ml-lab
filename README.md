@@ -51,6 +51,44 @@ After running, you should see:
 - `models/model.joblib`
 - `submission.csv`
 
+## Pipeline Flow
+
+### Training Flow (`python src/train.py`)
+
+```mermaid
+flowchart TD
+    A[train.py main()] --> B[load_data()]
+    B --> C[train.csv + test.csv read]
+    C --> D[prepare_train_features(train_df)]
+    D --> E[add_family_features]
+    E --> F[X and y prepared]
+    F --> G[train_test_split]
+    G --> H[build_preprocessor]
+    H --> I[fit_transform x_train]
+    I --> J[transform x_valid]
+    J --> K[RandomForestClassifier.fit]
+    K --> L[predict x_valid]
+    L --> M[accuracy_score]
+    M --> N[joblib.dump model.joblib]
+```
+
+### Prediction Flow (`python src/predict.py`)
+
+```mermaid
+flowchart TD
+    A[predict.py main()] --> B{model.joblib exists?}
+    B -- No --> C[FileNotFoundError]
+    B -- Yes --> D[load_data()]
+    D --> E[test_df selected]
+    E --> F[joblib.load model + preprocessor]
+    F --> G[prepare_test_features(test_df)]
+    G --> H[add_family_features]
+    H --> I[preprocessor.transform x_test]
+    I --> J[model.predict]
+    J --> K[PassengerId + Survived DataFrame]
+    K --> L[submission.csv written]
+```
+
 ## Notes for Beginners
 
 - Start with `notebooks/titanic_analysis.ipynb` if you want to understand each step interactively.
